@@ -86,7 +86,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_ACCOUNT = 'accounts.User'
+AUTH_USER_MODEL = 'accounts.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
