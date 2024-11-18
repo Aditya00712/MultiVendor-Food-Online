@@ -1,6 +1,6 @@
 def detectUser(user):
     if user.role == 1:
-        redirectUrl = 'VendorDashboard'
+        redirectUrl = 'vendorDashboard'
         return redirectUrl
     elif user.role == 2:
         redirectUrl = 'custDashboard'
