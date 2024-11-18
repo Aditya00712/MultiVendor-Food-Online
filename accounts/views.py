@@ -88,7 +88,9 @@ def login(request):
     return render(request, 'accounts/login.html')
 
 def logout(request):
-    return render(request, 'accounts/logout.html')
+    auth.logout(request)
+    messages.info(request, 'You are now logged out')
+    return redirect('login')
 
 def dashboard(request):
     return render(request, 'accounts/dashboard.html')
