@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from vendor.forms import VendorForm
 from .forms import *
 from .models import *
-from django.contrib import messages
+from django.contrib import messages, auth
 
 def registerUser(request):
     if request.method == 'POST':
@@ -71,3 +71,24 @@ def registerVendor(request):
     }
     
     return render(request, 'accounts/registerVendor.html', context)
+
+def login(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+
+        user = auth.authenticate(email=email, password=password)
+        if user is not None:
+            auth.login(request, user)
+            messages.success(request, 'You are now logged in')
+            return redirect('dashboard')
+        else:
+            messages.error(request, 'Invalid credentials')
+            return redirect('login')
+    return render(request, 'accounts/login.html')
+
+def logout(request):
+    return render(request, 'accounts/logout.html')
+
+def dashboard(request):
+    return render(request, 'accounts/dashboard.html')
