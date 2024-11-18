@@ -40,9 +40,8 @@ def registerUser(request):
 
 def registerVendor(request):
     if request.method == 'POST':
-        #store the data and create the user
-        form= UserForm(request.POST)
-        v_form= VendorForm(request.POST, request.FILES)
+        form = UserForm(request.POST)
+        v_form = VendorForm(request.POST, request.FILES)
         if form.is_valid() and v_form.is_valid():
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
@@ -57,19 +56,18 @@ def registerVendor(request):
             user_profile = UserProfile.objects.get(user=user)
             vendor.user_profile = user_profile
             vendor.save()
-            messages.success(request,'Your account has been Registered successfully! Please wait for the approval.')
+            messages.success(request,'Your account has been created successfully! Please wait for the admin to approve your account')
             return redirect('registerVendor')
         else:
             print('Invalid form')
             print(form.errors)
-            
     else:
         form = UserForm()
         v_form = VendorForm()
 
-        context = {
-            'form': form,
-            'v_form': v_form
-        }
+    context = {
+        'form': form,
+        'v_form': v_form
+    }
     
     return render(request, 'accounts/registerVendor.html', context)
