@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import redirect, render
 from . forms import VendorForm
 from accounts.forms import UserProfileForm
 from accounts.models import UserProfile
@@ -10,8 +11,20 @@ def vprofile(request):
     profile = get_object_or_404(UserProfile, user=request.user)
     vendor = get_object_or_404(Vendor, user=request.user)
 
-    profile_form = UserProfileForm(instance = profile)
-    vendor_form = VendorForm(instance = vendor)
+    if request.method == 'POST':
+        profile_form = UserProfileForm(request.POST, request.FILES, instance = profile)
+        vendor_form = VendorForm(request.POST, request.FILES, instance = vendor)
+        if profile_form.is_valid() and vendor_form.is_valid():
+            profile_form.save()
+            vendor_form.save()
+            messages.success(request, 'Profile Updated Successfully!')
+            return redirect('vprofile')
+        else:
+            messages.error(request, 'Please correct the error below.')
+
+    else:
+        profile_form = UserProfileForm(instance = profile)
+        vendor_form = VendorForm(instance = vendor)
 
     context = {
         'profile_form': profile_form,
