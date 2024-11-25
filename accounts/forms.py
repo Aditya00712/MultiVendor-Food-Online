@@ -1,5 +1,5 @@
 from django import forms
-from . models import User
+from . models import *
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -16,3 +16,10 @@ class UserForm(forms.ModelForm):
         if password != confirm_password:
             raise forms.ValidationError('Passwords do not match')
         return cleaned_data
+
+class UserProfileForm(forms.ModelForm):
+    profile_picture = forms.ImageField(widget=forms.FileInput(attrs={'class': 'btn btn-info'}))
+    cover_picture = forms.ImageField(widget=forms.FileInput(attrs={'class': 'btn btn-info'}))
+    class Meta:
+        model = UserProfile
+        fields = ['profile_picture', 'cover_picture', 'address_line_1', 'address_line_2','country', 'state', 'city', 'pin_code', 'latitude', 'longitude']
