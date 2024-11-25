@@ -1,0 +1,15 @@
+{% autoescape off %}
+
+Hi {{user.first_name}},
+
+{% if is_approved %}
+Congratulation! Your Restaurant Registration Approval by our Admin is successful. You can now login to your account and start adding your menu items. -- FoodOnline Support Team
+
+{% else %}
+We're sorry! you are not Eligible for Restaurant Registration. For more information, please contact our support@test.com. -- FoodOnline Support Team
+
+{% endif %}
+
+
+{% endautoescape %}
+

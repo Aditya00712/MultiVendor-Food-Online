@@ -10,6 +10,8 @@ from django.core.exceptions import PermissionDenied
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
 from .utils import *
+from django.template.defaultfilters import slugify
+from vendor.models import *
 
 #Restrict vendor from accessing the customer page
 def check_role_vendor(user):
@@ -80,26 +82,35 @@ def registerVendor(request):
         form = UserForm(request.POST)
         v_form = VendorForm(request.POST, request.FILES)
         if form.is_valid() and v_form.is_valid():
+
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
             username = form.cleaned_data['username']
-            email = form.cleaned_data['email']
+            email = form.cleaned_data['email'].lower()
             password = form.cleaned_data['password']
-            user = User.objects.create_user(first_name=first_name, last_name=last_name, username=username, email=email, password=password)
+            user = User.objects.create_user(first_name=first_name, 
+                last_name=last_name, 
+                username=username, 
+                email=email, 
+                password=password
+                )
             user.role = User.VENDOR
             user.save()
+
+            # ! Send Verification Email
+            mail_subject = "Activate your account"
+            mail_template = "accounts/emails/account_verification_email.html"
+            send_verification_email(request, user, mail_subject, mail_template)
+
+            # Create Vendor
             vendor = v_form.save(commit=False)
             vendor.user = user
+            # vendor.vendor_slug = slugify(v_form.cleaned_data["vendor_name"]) + str(user.id)
             user_profile = UserProfile.objects.get(user=user)
             vendor.user_profile = user_profile
             vendor.save()
-            
-            # ! Send Verification Email
-            mail_subject = 'Activate your account'
-            email_template = 'accounts/emails/account_verification_email.html'
-            send_verification_email(request, user, mail_subject, email_template)
 
-            messages.success(request,'Your account has been created successfully! Please wait for the admin to approve your account')
+            messages.success(request,f"{username} Your account has been created successfully! Please wait for the admin to approve your account")
             return redirect('registerVendor')
         else:
             print('Invalid form')
@@ -239,3 +250,5 @@ def reset_password(request):
             return redirect('reset_password')
         
     return render(request, 'accounts/reset_password.html')
+
+ 
