@@ -1,5 +1,6 @@
 from django import forms
 from . models import *
+from .validators import *
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -18,8 +19,23 @@ class UserForm(forms.ModelForm):
         return cleaned_data
 
 class UserProfileForm(forms.ModelForm):
-    profile_picture = forms.ImageField(widget=forms.FileInput(attrs={'class': 'btn btn-info'}))
-    cover_picture = forms.ImageField(widget=forms.FileInput(attrs={'class': 'btn btn-info'}))
+    address = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Start Typing...', 'required': 'required'}))
+    profile_picture = forms.FileField(widget=forms.FileInput(attrs={'class': 'btn btn-info'}), validators=[allow_only_images_validators])
+    cover_picture = forms.FileField(widget=forms.FileInput(attrs={'class': 'btn btn-info'}), validators=[allow_only_images_validators])
+    
+    # latitude = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+    # longitude = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+    #☝️ This is for readonly field, This is one way to make a field readonly
+
+
     class Meta:
         model = UserProfile
-        fields = ['profile_picture', 'cover_picture', 'address_line_1', 'address_line_2','country', 'state', 'city', 'pin_code', 'latitude', 'longitude']
+        fields = ['profile_picture', 'cover_picture', 'address', 'country', 'state', 'city', 'pin_code', 'latitude', 'longitude']
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            if field == 'latitude' or field == 'longitude':
+                self.fields[field].widget.attrs['readonly'] = 'readonly'
+        #☝️ This is for readonly field, This is the second way to make a field readonly
+
