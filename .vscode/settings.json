@@ -4,11 +4,21 @@
         "cust",
         "enctype",
         "endautoescape",
+        "endfor",
         "foodbakery",
         "foodimages",
+        "fooditems",
         "nomargin",
         "nopadding",
         "superadmin",
         "vprofile"
-    ]
+    ],
+    "cSpell.customDictionaries": {
+        "custom-dictionary-workspace": {
+            "name": "custom-dictionary-workspace",
+            "path": "${workspaceFolder:foodOnline}/.cspell/custom-dictionary-workspace.txt",
+            "addWords": true,
+            "scope": "workspace"
+        }
+    }
 }
