@@ -67,6 +67,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'accounts.context_processors.get_vendor',
+                # 'accounts.context_processors.get_google_api',#google api key for maps 
             ],
         },
     },
@@ -152,3 +153,5 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'foodOnline MarketPlace <projectdjango26@gmail.com>'
+
+# GOOGLE_API_KEY = 'Enter Your Api Key Here' #---Google Autocomplete Video---  https://www.youtube.com/watch?v=c3MjU9E9buQ
